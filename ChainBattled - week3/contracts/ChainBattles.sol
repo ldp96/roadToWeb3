@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 //../node_modules/
+//deployed at: 0x3eC53d7E033662498881063E7CBde8A813910998 mumbai
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -104,3 +105,4 @@ contract ChainBattles is ERC721URIStorage {
         msg.sender,randomness++)))% number;
     }
 }
+
