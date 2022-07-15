@@ -9,15 +9,15 @@ import "@openzeppelin/contracts/utils/Base64.sol";
 
 contract ChainBattles is ERC721URIStorage {
     using Strings for uint256;
-    using Strings for uint8;
     using Counters for Counters.Counter; 
     Counters.Counter private _tokenIds;
+    uint randomness;
 
     struct Attributes{
-        uint8 level;
-        uint8 speed;
-        uint8 strength;
-        uint8 life;
+        uint256 level;
+        uint256 speed;
+        uint256 strength;
+        uint256 life;
     }
 
     mapping(uint256 => Attributes) public tokenIdToData;
@@ -49,15 +49,15 @@ contract ChainBattles is ERC721URIStorage {
         return levels.toString();
     }
     function getSpeed(uint256 tokenId) public view returns (string memory) {
-        uint8 speed = tokenIdToData[tokenId].speed;
+        uint256 speed = tokenIdToData[tokenId].speed;
         return speed.toString();
     }
     function getStrength(uint256 tokenId) public view returns (string memory) {
-        uint8 strength = tokenIdToData[tokenId].strength;
+        uint256 strength = tokenIdToData[tokenId].strength;
         return strength.toString();
     }
     function getLife(uint256 tokenId) public view returns (string memory) {
-        uint8 life = tokenIdToData[tokenId].life;
+        uint256 life = tokenIdToData[tokenId].life;
         return life.toString();
     }
     function getTokenURI(uint256 tokenId) public view returns (string memory){
@@ -93,9 +93,14 @@ contract ChainBattles is ERC721URIStorage {
         require(ownerOf(tokenId) == msg.sender, "You must own this NFT to train it!");
         require(tokenIdToData[tokenId].life>0, "your token can't be trained anymore");
         tokenIdToData[tokenId].level++;
-        tokenIdToData[tokenId].speed++;
-        tokenIdToData[tokenId].strength++;
-        tokenIdToData[tokenId].life--;
+        tokenIdToData[tokenId].speed = random(100);
+        tokenIdToData[tokenId].strength = random(100);
+        tokenIdToData[tokenId].life = random(100);
         _setTokenURI(tokenId, getTokenURI(tokenId));
+    }
+
+    function random(uint number) public returns(uint){
+        return uint(keccak256(abi.encodePacked(block.timestamp,block.difficulty,  
+        msg.sender,randomness++)))% number;
     }
 }
